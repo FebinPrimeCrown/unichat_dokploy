@@ -1,0 +1,260 @@
+version: '3.8'
+
+services:
+  # ---------------------------
+  # 🧠 Main FastAPI Backend
+  # ---------------------------
+  backend:
+    build:
+      context: ./chat_back
+    container_name: chat-backend
+    environment:
+      - DATABASE_URL
+      - COOKIE_DOMAIN
+      - ENVIRONMENT
+      - CLUSTER_SECRET_PASS_ENCRYPTION_KEY
+      - MS_CLIENT_ID
+      - MS_CLIENT_SECRET
+      - MS_TENANT_ID
+      - MS_FROM_EMAIL
+      - UNSPLASH_ACCESS_KEY
+      - OPENAI_API_KEY
+      - ACCESS_TOKEN_SECRET_KEY
+      - REFRESH_TOKEN_SECRET_KEY
+      - JWT_ALGORITHM
+      - ACCESS_TOKEN_EXPIRE_MINUTES
+      - REFRESH_TOKEN_EXPIRE_HOURS
+      - RAZORPAY_KEY_ID
+      - RAZORPAY_KEY_SECRET
+      - RAZORPAY_WEBHOOK_SECRET
+      - DOMAIN_CHECK_API_KEY
+      - DOMAIN_CHECK_USER_AUTH_CODE
+      - RTR_API_URL
+      - RTR_API_CUSTOMER
+      - DHC_API_URL
+      - OTE_API_KEY
+      - DHC1_API_KEY
+      - DHC1_AUTH_USER_ID
+      - ICANN_APPLICABLE_TLDS
+      - ICANN_PRICE_INR
+      - ICANN_PRICE_USD
+      - BOX_CLIENT_ID
+      - BOX_CLIENT_SECRET
+      - BOX_REDIRECT_URI
+      - BOX_TOKENS_FILE
+      - BOX_KYC_ROOT_FOLDER_ID
+      - MAX_WEBSITES_ALLOWED
+      - WHM_HOST
+      - WHM_RESELLER_USERNAME
+      - WHM_API_TOKEN
+      - PACKAGE_NAME
+      - PDNS_URL_DEVELOPMENT
+      - PDNS_API_KEY_DEVELOPMENT
+      - PDNS_URL_STAGING
+      - PDNS_API_KEY_STAGING
+      - PDNS_URL_PRODUCTION
+      - PDNS_API_KEY_PRODUCTION
+      - REDIS_URL=redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./chat_back:/app
+    depends_on:
+      - redis
+      - mysql
+      - chat-mqtt
+      - rag-chatbot          # 👈 Added dependency to her service
+    restart: unless-stopped
+
+  # ---------------------------
+  # 🧵 Celery Worker
+  # ---------------------------
+  celery:
+    build:
+      context: ./chat_back
+    container_name: chat-celery
+    command: celery -A celery_app.celery_app worker --loglevel=info --pool=solo
+    volumes:
+      - ./chat_back:/app
+    depends_on:
+      - backend
+      - redis
+    environment:
+      - DATABASE_URL
+      - ENVIRONMENT
+      - CLUSTER_SECRET_PASS_ENCRYPTION_KEY
+      - REDIS_URL=redis://redis:6379/0
+
+      # Microsoft Mail
+      - MS_CLIENT_ID
+      - MS_CLIENT_SECRET
+      - MS_TENANT_ID
+      - MS_FROM_EMAIL
+
+      # JWT / Auth
+      - ACCESS_TOKEN_SECRET_KEY
+      - REFRESH_TOKEN_SECRET_KEY
+      - JWT_ALGORITHM
+      - ACCESS_TOKEN_EXPIRE_MINUTES
+      - REFRESH_TOKEN_EXPIRE_HOURS
+
+      # Razorpay
+      - RAZORPAY_KEY_ID
+      - RAZORPAY_KEY_SECRET
+      - RAZORPAY_WEBHOOK_SECRET
+
+      # Domain APIs
+      - DOMAIN_CHECK_API_KEY
+      - DOMAIN_CHECK_USER_AUTH_CODE
+
+      - RTR_API_URL
+      - RTR_API_CUSTOMER
+
+      - DHC_API_URL
+      - OTE_API_KEY
+
+      - DHC1_API_KEY
+      - DHC1_AUTH_USER_ID
+
+      - DHC2_API_KEY
+      - DHC2_AUTH_USER_ID
+
+      - DHC3_API_KEY
+      - DHC3_AUTH_USER_ID
+
+      - DHC4_API_KEY
+      - DHC4_AUTH_USER_ID
+
+      - DHC5_API_KEY
+      - DHC5_AUTH_USER_ID
+
+      # ICANN
+      - ICANN_APPLICABLE_TLDS
+      - ICANN_PRICE_INR
+      - ICANN_PRICE_USD
+
+      # WHM
+      - WHM_HOST
+      - WHM_RESELLER_USERNAME
+      - WHM_API_TOKEN
+      - PACKAGE_NAME
+
+      # PowerDNS
+      - PDNS_URL_DEVELOPMENT
+      - PDNS_API_KEY_DEVELOPMENT
+
+      - PDNS_URL_STAGING
+      - PDNS_API_KEY_STAGING
+
+      - PDNS_URL_PRODUCTION
+      - PDNS_API_KEY_PRODUCTION
+
+      # Box
+      - BOX_CLIENT_ID
+      - BOX_CLIENT_SECRET
+      - BOX_REDIRECT_URI
+      - BOX_TOKENS_FILE
+      - BOX_KYC_ROOT_FOLDER_ID
+
+      # Misc
+      - MAX_WEBSITES_ALLOWED
+      
+    restart: unless-stopped
+
+  # ---------------------------
+  # 🌐 Frontend
+  # ---------------------------
+  frontend:
+    build:
+      context: ./chat_front
+      dockerfile: Dockerfile.dev
+    container_name: chat-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./chat_front:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    command: npm run dev
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # ---------------------------
+  # 🧩 RAG Chatbot Service (her FastAPI)
+  # ---------------------------
+  rag-chatbot:
+    build:
+      context: ./rag_service        # 👈 Path to her folder
+    container_name: rag-chatbot
+    ports:
+      - "8001:8000"                 # external:internal
+    volumes:
+      - rag_indexes:/app/data/indexes
+      - rag_markdown:/app/data/markdown
+      - rag_temp:/app/data/temp
+    environment:
+      - REDIS_HOST=redis            # 👈 Use shared redis
+      - REDIS_PORT=6379
+      - OLLAMA_BASE_URL=https://ollama.domainhostingcafe.com
+      - OLLAMA_USERNAME=pctuser
+      - OLLAMA_PASSWORD=Fk6YM0Z6W8Bd7j7d
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # ---------------------------
+  # ⚙️ Redis (shared for backend + RAG)
+  # ---------------------------
+  redis:
+    image: redis:7
+    container_name: chat-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+
+  # ---------------------------
+  # 🗄️ MySQL
+  # ---------------------------
+  mysql:
+    image: mysql:8
+    container_name: chat-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: myexam1234   # ✅ matches your .env
+      MYSQL_DATABASE: chatpanel         # ✅ matches your .env
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # ---------------------------
+  # 📡 MQTT Broker
+  # ---------------------------
+  chat-mqtt:
+    image: eclipse-mosquitto
+    container_name: chat-mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./chat_back/mosquitto/config:/mosquitto/config
+      - ./chat_back/mosquitto/data:/mosquitto/data
+      - ./chat_back/mosquitto/log:/mosquitto/log
+    restart: unless-stopped
+
+
+# ---------------------------
+# 📦 Volumes
+# ---------------------------
+volumes:
+  mysql_data:
+  redis_data:
+  rag_indexes:
+  rag_markdown:
+  rag_temp:

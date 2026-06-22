@@ -168,8 +168,7 @@ services:
     build:
       context: ./chat_front
       dockerfile: Dockerfile.dev
-    container_name: chat-frontend
-    args:
+      args:
         - NEXT_PUBLIC_API_URL_DEVELOPMENT=${NEXT_PUBLIC_API_URL_DEVELOPMENT}
         - NEXT_PUBLIC_API_URL_STAGING=${NEXT_PUBLIC_API_URL_STAGING}
         - NEXT_PUBLIC_API_URL_PRODUCTION=${NEXT_PUBLIC_API_URL_PRODUCTION}
@@ -183,6 +182,7 @@ services:
         - NEXT_PUBLIC_MAX_DISK_SIZE=${NEXT_PUBLIC_MAX_DISK_SIZE}
         - NEXT_PUBLIC_BANDWIDTH_EXCEEDS_WARNING_PERCENT=${NEXT_PUBLIC_BANDWIDTH_EXCEEDS_WARNING_PERCENT}
 
+    container_name: chat-frontend
     ports:
       - "3000:3000"
     volumes:

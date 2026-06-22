@@ -1,0 +1,190 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: #444; /* Main background color */
+}
+
+#gjs {
+  border: 3px solid #444; /* Same color as body */
+  height: 100%;
+  width: 100%;
+  padding-bottom: 15px; /* Space at the bottom */
+  background-color: #444; /* Match the background color */
+}
+
+.gjs-cv-canvas {
+  width: 100%;
+}
+
+.gjs-block {
+  width: auto;
+  height: auto;
+  min-height: auto;
+}
+
+.panel__top {
+  padding: 0;
+  z-index: 10; /* Ensure it sits above other elements */
+  width: 100%;
+  display: flex;
+  position: absolute;
+  justify-content: space-between;
+}
+
+.panel__basic-actions {
+  position: initial;
+}
+
+.panel__switcher {
+  position: initial;
+}
+
+.editor-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  height: 100vh;
+}
+
+.editor-canvas {
+  flex-grow: 1;
+}
+
+.panel__right {
+  height: 100%;
+  flex-basis: 230px;
+  position: relative;
+  overflow-y: auto;
+}
+
+.panel__devices {
+  position: initial;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.col {
+  flex: 1;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Additional styles for the block container */
+.block-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust column size and number of columns */
+  gap: 10px; /* Space between blocks */
+  padding: 10px; /* Space around the grid */
+  padding-top: 40px;
+  box-sizing: border-box;
+}
+
+.layers-container {
+  padding-top: 40px;
+}
+
+.styles-container {
+  padding-top: 40px;
+}
+
+.traits-container {
+  padding-top: 40px;
+}
+
+.gjs-block {
+  display: flex;
+  flex-basis: 45%;
+  height: 90px;
+  width: 50px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px; /* Rounded corners */
+  box-sizing: border-box;
+}
+
+.panel__switcher .custom-save-button {
+  background-color: transparent;
+  color: #007bff;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid #007bff; /* Blue outline */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+}
+
+.panel__switcher .custom-edit-button {
+  background-color: transparent;
+  color: #40cd1e;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid #40cd1e; /* Blue outline */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+}
+
+/* Hover effect */
+.panel__switcher .custom-save-button:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Click (pressed) effect */
+.panel__switcher .custom-save-button:active {
+  background-color: #0056b3; /* Darker blue on click */
+  transform: scale(0.97); /* Slightly shrink for a pressed effect */
+}
+
+
+
+.panel__switcher .custom-edit-button:hover {
+  background-color: #40cd1e;
+  color: #fff;
+}
+
+/* Click (pressed) effect */
+.panel__switcher .custom-edit-button:active {
+  background-color: #40cd1e; /* Darker blue on click */
+  transform: scale(0.97); /* Slightly shrink for a pressed effect */
+}
+
+.toast-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff; /* Blue color */
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  font-size: 16px;
+  z-index: 1000;
+  max-width: 250px; /* Ensure the width does not overflow */
+}
+
+.toast-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  line-height: 20px;
+}

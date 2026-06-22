@@ -1,0 +1,128 @@
+version: '3.8'
+
+services:
+  # ---------------------------
+  # 🧠 Your main backend
+  # ---------------------------
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chat-backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - mosquitto
+      - mysql
+    env_file:
+      - .env
+
+  # ---------------------------
+  # ⚙️ Redis (shared by everything)
+  # ---------------------------
+  redis:
+    image: redis:7
+    container_name: chat-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  # ---------------------------
+  # 📨 MQTT Broker
+  # ---------------------------
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: chat-mqtt
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+
+  # ---------------------------
+  # 🧵 Celery Worker
+  # ---------------------------
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chat-celery
+    command: celery -A celery_app worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - mysql
+    env_file:
+      - .env
+
+  # ---------------------------
+  # 🗄️ MySQL Database
+  # ---------------------------
+  mysql:
+    image: mysql:8
+    container_name: chat-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: myexam1234
+      MYSQL_DATABASE: chatpanel
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # ---------------------------
+  # 🤖 RAG Chatbot Service
+  # ---------------------------
+  rag-chatbot:
+    build:
+      context: ./rag_bot   # 👈 if you move her code to a subfolder, or use "." if same root
+      dockerfile: Dockerfile
+    container_name: rag-chatbot
+    ports:
+      - "8001:8000"  # different port from your backend
+    volumes:
+      - rag_indexes:/app/data/indexes
+      - rag_markdown:/app/data/markdown
+      - rag_temp:/app/data/temp
+    environment:
+      - REDIS_HOST=chat-redis   # 👈 use YOUR redis
+      - REDIS_PORT=6379
+      - OLLAMA_BASE_URL=http://ollama:11434
+    depends_on:
+      - redis
+      - ollama
+    restart: unless-stopped
+    env_file:
+      - ./rag_bot/.env  # optional if her env is separate
+
+  # ---------------------------
+  # 🧠 Ollama Model Server
+  # ---------------------------
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+# ---------------------------
+# 📦 Shared Volumes
+# ---------------------------
+volumes:
+  mysql_data:
+  redis_data:
+  rag_indexes:
+  rag_markdown:
+  rag_temp:
+  ollama_data:

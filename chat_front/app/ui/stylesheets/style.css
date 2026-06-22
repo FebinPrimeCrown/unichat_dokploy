@@ -1,0 +1,144 @@
+.custom-dropdown {
+  width: 100%;
+  padding: 16.5px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1.4375em;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #fafbfb;
+  box-sizing: border-box;
+  margin-top: 8px;
+}
+
+  .custom-dropdown-contact {
+    width: 100%;
+    padding: 16.5px 14px;
+    border: 1px solid silver;
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 1.4375em;
+    color: rgba(0, 0, 0, 0.87);
+    background-color: #fff;
+    box-sizing: border-box;
+    margin-top: 8px;
+    height: 54px;
+  }
+
+  .custom-dropdown-contact:hover {
+    border-color: silver;
+  }
+  
+  .custom-dropdown:hover {
+    border-color: #000;
+  }
+  
+  .custom-dropdown:focus {
+    border-color: #03c9d7;
+    outline: none;
+  }
+  .custom-dropdown-contact:focus {
+    border-color: #03c9d7;
+    outline: none;
+  }
+  
+  .custom-dropdown:focus:hover {
+    border-color: #03c9d7; /* Maintain the focus border color on hover */
+  }
+  .custom-dropdown:blur {
+    border-color: rgba(0, 0, 0, 0.23); /* Revert to original border color */
+  }
+
+  .react-tel-input:hover .form-control,
+  .react-tel-input:hover .flag-dropdown {
+    border-color: #000;
+  }
+  .react-tel-input .form-control{
+    width: 100% !important
+  }
+  
+  .react-tel-input:focus .form-control{
+    border-color: red !important;
+    outline: none;
+  }
+ .react-tel-input:focus:hover .form-control{
+    /* border-color: #03c9d7; */
+    border-color: red !important; 
+    outline: none;
+  }
+
+  .drop-in {
+    animation: dropIn 0.3s ease-in-out;
+  }
+  
+  @keyframes dropIn {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+
+  .user-circle {
+    stroke-dasharray: 94;
+    stroke-dashoffset: 94;
+  }
+  svg .user-circle {
+    animation: user-circle 1s ease-in-out forwards;
+  }
+  .user-tick {
+    stroke-dasharray: 35;
+    stroke-dashoffset: 35;
+  }
+  svg .user-tick {
+    animation: user-tick 0.8s ease-out forwards;
+    animation-delay: 0.95s;
+  }
+  
+  @keyframes user-circle {
+    from {
+      stroke-dashoffset: 94;
+    }
+    to {
+      stroke-dashoffset: 188;
+    }
+  }
+  
+  @keyframes user-tick {
+    from {
+      stroke-dashoffset: 35;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .phone-input-container input {
+    width: 100%; /* Ensure it takes full width like MUI TextField */
+    padding: 10px 14px; /* Match MUI TextField padding */
+    border: 1px solid rgba(0, 0, 0, 0.15) !important; /* Default MUI TextField border */
+    border-radius: 4px; /* MUI border radius */
+    font-size: 16px;
+    background-color: white;
+}
+
+.phone-input-container input:hover {
+    border-color: #b1b2b3; /* MUI hover color */
+}
+
+.phone-input-container input:focus {
+    outline: none;
+    border: 2px solid #03c9d6 !important; /* MUI primary focus color */
+    box-shadow: 0 0 0 0px rgba(25, 118, 210, 0.25) !important; /* Subtle focus shadow */
+    transition: 0s
+}
+
+.phone-input-container input:focus:hover {
+  outline: none;
+  border: 2px solid rgba(0, 0, 0, 0.15) !important; /* MUI primary focus color */
+  box-shadow: 0 0 0 0px rgba(25, 118, 210, 0.25) !important; /* Subtle focus shadow */
+}

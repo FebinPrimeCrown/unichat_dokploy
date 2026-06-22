@@ -158,7 +158,7 @@ services:
 
       # Misc
       - MAX_WEBSITES_ALLOWED
-      
+
     restart: unless-stopped
 
   # ---------------------------
@@ -169,6 +169,20 @@ services:
       context: ./chat_front
       dockerfile: Dockerfile.dev
     container_name: chat-frontend
+    args:
+        - NEXT_PUBLIC_API_URL_DEVELOPMENT=${NEXT_PUBLIC_API_URL_DEVELOPMENT}
+        - NEXT_PUBLIC_API_URL_STAGING=${NEXT_PUBLIC_API_URL_STAGING}
+        - NEXT_PUBLIC_API_URL_PRODUCTION=${NEXT_PUBLIC_API_URL_PRODUCTION}
+        - NEXT_PUBLIC_STRICT_MODE=${NEXT_PUBLIC_STRICT_MODE}
+        - NEXT_PUBLIC_RAZORPAY_KEY_ID=${NEXT_PUBLIC_RAZORPAY_KEY_ID}
+        - NEXT_PUBLIC_ENVIRONMENT=${NEXT_PUBLIC_ENVIRONMENT}
+        - NEXT_PUBLIC_KYC_REDIRECT=${NEXT_PUBLIC_KYC_REDIRECT}
+        - NEXT_PUBLIC_ICANN_DOMAIN_TLDS=${NEXT_PUBLIC_ICANN_DOMAIN_TLDS}
+        - NEXT_PUBLIC_ICANN_PRICE_INR=${NEXT_PUBLIC_ICANN_PRICE_INR}
+        - NEXT_PUBLIC_ICANN_PRICE_USD=${NEXT_PUBLIC_ICANN_PRICE_USD}
+        - NEXT_PUBLIC_MAX_DISK_SIZE=${NEXT_PUBLIC_MAX_DISK_SIZE}
+        - NEXT_PUBLIC_BANDWIDTH_EXCEEDS_WARNING_PERCENT=${NEXT_PUBLIC_BANDWIDTH_EXCEEDS_WARNING_PERCENT}
+
     ports:
       - "3000:3000"
     volumes:
@@ -196,11 +210,11 @@ services:
       - rag_markdown:/app/data/markdown
       - rag_temp:/app/data/temp
     environment:
-      - REDIS_HOST=redis            # 👈 Use shared redis
-      - REDIS_PORT=6379
-      - OLLAMA_BASE_URL=https://ollama.domainhostingcafe.com
-      - OLLAMA_USERNAME=pctuser
-      - OLLAMA_PASSWORD=Fk6YM0Z6W8Bd7j7d
+      - REDIS_HOST
+      - REDIS_PORT
+      - OLLAMA_BASE_URL
+      - OLLAMA_USERNAME
+      - OLLAMA_PASSWORD
     depends_on:
       - redis
     restart: unless-stopped

@@ -181,13 +181,15 @@ services:
         - NEXT_PUBLIC_MAX_DISK_SIZE=${NEXT_PUBLIC_MAX_DISK_SIZE}
         - NEXT_PUBLIC_BANDWIDTH_EXCEEDS_WARNING_PERCENT=${NEXT_PUBLIC_BANDWIDTH_EXCEEDS_WARNING_PERCENT}
 
-    restart: unless-stopped
-
+    container_name: chat-frontend
     environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
       - NEXT_PUBLIC_ENVIRONMENT
-
     depends_on:
       - backend
+    restart: unless-stopped
+
   # ---------------------------
   # 🧩 RAG Chatbot Service (her FastAPI)
   # ---------------------------

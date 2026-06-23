@@ -124,7 +124,7 @@ export default function RootLayout({
               {/* ------------------------------------------- */}
               <Footer />
             </Container>
-            <ChatWidget widgetToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdhbmlzYXRpb25faWQiOjEsIndpZGdldF9pZCI6MTJ9.M1xEdXarxyjyTwEQKBkHcSJVOZldNN_smriZixgL4qg" />
+            {/* <ChatWidget widgetToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdhbmlzYXRpb25faWQiOjEsIndpZGdldF9pZCI6MTJ9.M1xEdXarxyjyTwEQKBkHcSJVOZldNN_smriZixgL4qg" /> */}
           </PageWrapper>
         </>
       ) : loading ? (<Box

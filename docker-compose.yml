@@ -167,7 +167,6 @@ services:
   frontend:
     build:
       context: ./chat_front
-      dockerfile: Dockerfile.dev
       args:
         - NEXT_PUBLIC_API_URL_DEVELOPMENT=${NEXT_PUBLIC_API_URL_DEVELOPMENT}
         - NEXT_PUBLIC_API_URL_STAGING=${NEXT_PUBLIC_API_URL_STAGING}
@@ -189,7 +188,6 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
-    command: npm run dev
     depends_on:
       - backend
     restart: unless-stopped

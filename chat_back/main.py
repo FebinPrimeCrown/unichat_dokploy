@@ -24,6 +24,7 @@ origins = [
     "http://localhost:8080",
     "http://localhost:3001",
     "http://democloud.domainhostingcafe.com",
+    "https://democloud.domainhostingcafe.com",
     "http://localhost:3002",
     "https://stage.panel.domainhostingcafe.com",
     "https://my.primecrown.com",

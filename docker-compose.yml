@@ -12,6 +12,8 @@ services:
       - DATABASE_URL
       - COOKIE_DOMAIN
       - ENVIRONMENT
+      - MQTT_BROKER
+      - MQTT_PORT
       - CLUSTER_SECRET_PASS_ENCRYPTION_KEY
       - MS_CLIENT_ID
       - MS_CLIENT_SECRET
@@ -259,6 +261,9 @@ services:
   chat-mqtt:
     image: eclipse-mosquitto
     container_name: chat-mosquitto
+    environment:
+      - MQTT_BROKER
+      - MQTT_PORT
     ports:
       - "1883:1883"
       - "9001:9001"

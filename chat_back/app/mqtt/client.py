@@ -3,7 +3,7 @@ import json
 import paho.mqtt.client as mqtt
 import os
 
-BROKER = os.getenv("MQTT_BROKER", "chat-mqtt")  # ✅ use Docker service name
+BROKER = os.getenv("MQTT_BROKER", "chat-mosquitto")  # ✅ use Docker service name
 PORT = int(os.getenv("MQTT_PORT", 1883))
 
 client = mqtt.Client()

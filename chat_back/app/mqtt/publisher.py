@@ -9,6 +9,6 @@ def publish_mqtt(topic: str, payload: dict):
     publish.single(
         topic,
         json.dumps(payload),
-        hostname=os.getenv("MQTT_BROKER", "chat-mqtt"),  # ✅ use Docker name
+        hostname=os.getenv("MQTT_BROKER", "chat-mosquitto"),  # ✅ use Docker name
         port=int(os.getenv("MQTT_PORT", 1883))
     )

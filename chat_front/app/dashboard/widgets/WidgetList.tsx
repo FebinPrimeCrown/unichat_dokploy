@@ -116,7 +116,7 @@ const WidgetList = () => {
   }, []);
 
   const handleCopy = (token: string) => {
-    const embedCode = `<script src="https://yourdomain.com/widget.js" data-widget-id="${token}"></script>`;
+    const embedCode = `<script src="https://demochatwidget.domainhostingcafe.com/chat-widget.js" data-widget-id="${token}"></script>`;
     navigator.clipboard.writeText(embedCode);
   };
 

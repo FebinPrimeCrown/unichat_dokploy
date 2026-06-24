@@ -51,6 +51,8 @@ services:
       - WHM_HOST
       - WHM_RESELLER_USERNAME
       - WHM_API_TOKEN
+      - JWT_ALGORITHM
+      - JWT_SECRET
       - PACKAGE_NAME
       - PDNS_URL_DEVELOPMENT
       - PDNS_API_KEY_DEVELOPMENT

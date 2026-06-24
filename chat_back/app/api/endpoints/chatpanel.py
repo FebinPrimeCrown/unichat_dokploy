@@ -697,7 +697,7 @@ def domain_to_ai_format(domain: str) -> str:
     """
     return clean_domain(domain).replace(".", "-")
 
-RAG_API_URL = "http://rag-chatbot:8000"
+RAG_API_URL = "http://host.docker.internal:8001"
 EMBEDDING_INDEX_DIR = "/app/data/indexes"
 
 @router.post("/widgets", response_model=WidgetOut)

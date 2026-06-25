@@ -11,7 +11,7 @@ export const useAdminEvents = () => {
 
   useEffect(() => {
     console.log(`📡 Initializing MQTT for org: ${organisationId}`);
-    const client = mqtt.connect("wss://demochatback.domainhostingcafe.com/mqtt");
+    const client = mqtt.connect("wss://demochatwidget.domainhostingcafe.com/mqtt");
 
     client.on('connect', () => {
       console.log('🟢 MQTT connected (admin panel)');

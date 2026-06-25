@@ -165,15 +165,15 @@ const ChatSlice = createSlice({
         console.log("✅ [receiveMsg] Updated existing chat:", updatedChat);
       } else {
         const newChat: ChatsType = {
-          id: Date.now(),
-          name: "Guest User",
-          room_id,
-          thumb: "/images/profile/user-1.jpg",
-          status: "online",
-          messages: [msg],
-          last_active: msg.createdAt,
-          last_message: msg.msg,
-        };
+              id: Date.now(),
+              name: String(msg.senderId || room_id),
+              room_id,
+              thumb: `https://api.dicebear.com/7.x/thumbs/svg?seed=${msg.senderId}`,
+              status: "online",
+              messages: [msg],
+              last_active: msg.createdAt,
+              last_message: msg.msg,
+            };
         state.chats.unshift(newChat);
         console.log("🆕 [receiveMsg] Added new guest chat:", newChat);
       }
